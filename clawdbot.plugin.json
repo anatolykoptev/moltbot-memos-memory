@@ -1,0 +1,29 @@
+{
+  "id": "memos-memory",
+  "kind": "memory",
+  "name": "Memory (MemOS)",
+  "description": "MemOS-backed semantic memory with persistent storage, vector search, and preference tracking",
+  "version": "1.0.0",
+  "homepage": "https://github.com/koptev/clawdbot-memos-memory",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "apiUrl": {
+        "type": "string",
+        "description": "MemOS API URL",
+        "default": "http://memos-api:8000"
+      },
+      "userId": {
+        "type": "string",
+        "description": "Default user ID for memory operations",
+        "default": "default"
+      },
+      "topK": {
+        "type": "number",
+        "description": "Number of results to return from search",
+        "default": 10
+      }
+    }
+  }
+}
