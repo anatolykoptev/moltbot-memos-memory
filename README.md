@@ -57,6 +57,11 @@ Add to your `moltbot.json`:
 |----------|-------------|---------|
 | `MEMOS_API_URL` | MemOS API endpoint | `http://memos-api:8000` |
 | `MEMOS_USER_ID` | Default user ID | `default` |
+| `INTERNAL_SERVICE_SECRET` | API key for MemOS authentication | — |
+
+### Authentication
+
+If your MemOS API has `AUTH_ENABLED=true`, the plugin will automatically use `INTERNAL_SERVICE_SECRET` from environment for Bearer token authentication. Make sure to pass this variable to your Moltbot container.
 
 ## Provided Tools
 

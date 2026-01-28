@@ -4,9 +4,19 @@
  */
 
 export class MemosApi {
-  constructor(baseUrl, defaultUserId = "default") {
+  constructor(baseUrl, defaultUserId = "default", apiKey = null) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     this.defaultUserId = defaultUserId;
+    // Use provided apiKey or fall back to INTERNAL_SERVICE_SECRET env var
+    this.apiKey = apiKey || process.env.INTERNAL_SERVICE_SECRET || null;
+  }
+
+  #getHeaders() {
+    const headers = { "Content-Type": "application/json" };
+    if (this.apiKey) {
+      headers["Authorization"] = `Bearer ${this.apiKey}`;
+    }
+    return headers;
   }
 
   async search(query, options = {}) {
@@ -14,7 +24,7 @@ export class MemosApi {
 
     const response = await fetch(`${this.baseUrl}/product/search`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: this.#getHeaders(),
       body: JSON.stringify({
         query,
         user_id: userId,
@@ -37,7 +47,7 @@ export class MemosApi {
 
     const response = await fetch(`${this.baseUrl}/product/add`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: this.#getHeaders(),
       body: JSON.stringify({
         user_id: userId,
         session_id: sessionId,
@@ -59,7 +69,7 @@ export class MemosApi {
 
     const response = await fetch(`${this.baseUrl}/product/get_all`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: this.#getHeaders(),
       body: JSON.stringify({
         user_id: userId,
         memory_type: memoryType,
@@ -78,7 +88,7 @@ export class MemosApi {
 
     const response = await fetch(`${this.baseUrl}/product/delete_memory`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: this.#getHeaders(),
       body: JSON.stringify({
         writable_cube_ids: ["default"],
         memory_ids: memoryIds,
