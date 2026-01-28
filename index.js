@@ -1,5 +1,5 @@
 /**
- * MemOS Memory Plugin for Clawdbot
+ * MemOS Memory Plugin for Moltbot
  *
  * Replaces the default memory-core plugin with MemOS-backed
  * semantic memory storage and retrieval.
@@ -8,7 +8,7 @@
 import { MemosApi } from "./api.js";
 
 /**
- * Format MemOS search results to Clawdbot memory_search format
+ * Format MemOS search results to Moltbot memory_search format
  * MemOS returns: { code, message, data: { text_mem, act_mem, para_mem, pref_mem, tool_mem } }
  * Each *_mem is an array of cubes: [{ cube_id, memories: [...] }]
  */

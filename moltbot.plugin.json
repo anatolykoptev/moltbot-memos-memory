@@ -4,7 +4,7 @@
   "name": "Memory (MemOS)",
   "description": "MemOS-backed semantic memory with persistent storage, vector search, and preference tracking",
   "version": "1.0.0",
-  "homepage": "https://github.com/koptev/clawdbot-memos-memory",
+  "homepage": "https://github.com/anatolykoptev/moltbot-memos-memory",
   "configSchema": {
     "type": "object",
     "additionalProperties": false,

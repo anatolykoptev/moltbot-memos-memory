@@ -16,7 +16,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anatolykoptev/clawdbot-memos-memory.git"
+    "url": "https://github.com/anatolykoptev/moltbot-memos-memory.git"
   },
   "moltbot": {
     "extensions": ["./index.js"]
