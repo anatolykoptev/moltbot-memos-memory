@@ -181,10 +181,11 @@ function createMemoryGetTool(api, config, logger) {
           memoryType: "text_mem",
         });
 
-        let memories = allMemories?.data || [];
+        // Ensure memories is always an array
+        let memories = Array.isArray(allMemories?.data) ? allMemories.data : [];
 
         // Apply simple text filter if provided
-        if (filter && Array.isArray(memories)) {
+        if (filter && memories.length > 0) {
           const lowerFilter = filter.toLowerCase();
           memories = memories.filter((m) => {
             const content = (m.memory_content || m.memory_value || m.content || "").toLowerCase();
