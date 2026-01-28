@@ -313,10 +313,16 @@ const memosMemoryPlugin = {
 
     const logger = api.logger;
 
-    logger?.info?.(`Initializing MemOS memory plugin with API: ${config.apiUrl}`);
+    // Get API key from environment for authentication
+    const apiKey = process.env.INTERNAL_SERVICE_SECRET || null;
 
-    // Create API client
-    const memosApi = new MemosApi(config.apiUrl, config.userId);
+    logger?.info?.(`Initializing MemOS memory plugin with API: ${config.apiUrl}`);
+    if (apiKey) {
+      logger?.debug?.("MemOS API authentication enabled");
+    }
+
+    // Create API client with optional authentication
+    const memosApi = new MemosApi(config.apiUrl, config.userId, apiKey);
 
     // Register tools
     api.registerTool(
