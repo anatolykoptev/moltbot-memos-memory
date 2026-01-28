@@ -53,8 +53,7 @@ export class MemosApi {
       body: JSON.stringify({
         user_id: userId,
         session_id: sessionId,
-        async_mode: "sync",
-        mode: "fast",
+        async_mode: "async",  // Use async mode to compute embeddings in background
         messages: content,
       }),
     });
