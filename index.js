@@ -117,7 +117,9 @@ function createMemorySearchTool(api, config, logger) {
           userId: config.userId,
         });
 
-        const results = formatSearchResults(searchResult, query)
+        // Defensive: ensure we always have an array before calling filter
+        const formatted = formatSearchResults(searchResult, query) || [];
+        const results = formatted
           .filter((r) => r.score >= minScore)
           .slice(0, maxResults);
 
