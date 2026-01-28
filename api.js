@@ -14,7 +14,8 @@ export class MemosApi {
   #getHeaders() {
     const headers = { "Content-Type": "application/json" };
     if (this.apiKey) {
-      headers["Authorization"] = `Bearer ${this.apiKey}`;
+      // MemOS uses X-Internal-Service header for container-to-container auth
+      headers["X-Internal-Service"] = this.apiKey;
     }
     return headers;
   }
