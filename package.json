@@ -1,11 +1,11 @@
 {
-  "name": "@anthropic/clawdbot-memos-memory",
-  "version": "1.0.0",
-  "description": "MemOS memory plugin for Clawdbot - semantic memory with persistent storage and vector search",
+  "name": "memos-memory",
+  "version": "1.0.1",
+  "description": "MemOS memory plugin for Moltbot - semantic memory with persistent storage and vector search",
   "type": "module",
   "main": "index.js",
   "keywords": [
-    "clawdbot",
+    "moltbot",
     "plugin",
     "memory",
     "memos",
@@ -16,9 +16,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/koptev/clawdbot-memos-memory.git"
+    "url": "https://github.com/anatolykoptev/clawdbot-memos-memory.git"
   },
-  "clawdbot": {
+  "moltbot": {
     "extensions": ["./index.js"]
   },
   "engines": {
