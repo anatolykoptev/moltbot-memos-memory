@@ -107,9 +107,10 @@ function createMemorySearchTool(api, config, logger) {
     },
     execute: async (_toolCallId, params) => {
       const { query, maxResults = 10, minScore = 0.0 } = params;
+      logger?.info?.(`[MEMOS-PLUGIN] memory_search CALLED: query="${query}"`);
 
       try {
-        logger?.debug?.(`memory_search: query="${query}", maxResults=${maxResults}`);
+        logger?.info?.(`memory_search: query="${query}", maxResults=${maxResults}`);
 
         const searchResult = await api.search(query, {
           topK: maxResults,
