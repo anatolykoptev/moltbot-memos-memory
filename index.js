@@ -319,7 +319,9 @@ const memosMemoryPlugin = {
 
     logger?.info?.(`Initializing MemOS memory plugin with API: ${config.apiUrl}`);
     if (apiKey) {
-      logger?.debug?.("MemOS API authentication enabled");
+      logger?.info?.(`MemOS API authentication enabled (key: ${apiKey.substring(0, 8)}...)`);
+    } else {
+      logger?.warn?.("MemOS API: No INTERNAL_SERVICE_SECRET found - requests may fail with 401");
     }
 
     // Create API client with optional authentication
