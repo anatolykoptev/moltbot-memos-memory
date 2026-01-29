@@ -244,35 +244,31 @@ function createMemorySaveTool(api, config, logger) {
     execute: async (_toolCallId, params) => {
       const { content } = params;
 
-      try {
-        logger?.debug?.(`memory_save: storing "${content.slice(0, 50)}..."`);
+      // Background Execution Pattern
+      // We return immediately to prevent agent timeout, while the save happens in background.
+      logger?.debug?.(`memory_save: [BACKGROUND] storing "${content.slice(0, 50)}..."`);
 
-        const result = await api.add(content, {
-          userId: config.userId,
+      // Fire and forget - do NOT await the promise
+      api.add(content, {
+        userId: config.userId,
+      })
+        .then(() => {
+          logger?.info?.(`memory_save: [BACKGROUND] save completed successfully`);
+        })
+        .catch((error) => {
+          logger?.error?.(`memory_save: [BACKGROUND] save failed: ${error.message}`);
         });
 
-        logger?.info?.(`memory_save: saved successfully`);
-
-        return {
-          type: "json",
-          data: {
-            success: true,
-            message: "Memory saved successfully",
-            provider: "memos",
-          },
-        };
-      } catch (error) {
-        logger?.error?.(`memory_save error: ${error.message}`);
-
-        return {
-          type: "json",
-          data: {
-            success: false,
-            error: error.message,
-            provider: "memos",
-          },
-        };
-      }
+      // Return immediately to the agent
+      return {
+        type: "json",
+        data: {
+          success: true,
+          message: "Memory save queued in background.",
+          provider: "memos",
+          status: "queued"
+        },
+      };
     },
   };
 }

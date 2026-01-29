@@ -1,7 +1,21 @@
-/**
- * MemOS API Client
- * Handles communication with MemOS REST API
- */
+// Helper for timeout
+const fetchWithTimeout = async (resource, options = {}) => {
+  const { timeout = 15000 } = options;
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(resource, {
+      ...options,
+      signal: controller.signal
+    });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    throw error;
+  }
+};
 
 export class MemosApi {
   constructor(baseUrl, defaultUserId = "default", apiKey = null) {
@@ -24,7 +38,7 @@ export class MemosApi {
   async search(query, options = {}) {
     const { topK = 10, userId = this.defaultUserId } = options;
 
-    const response = await fetch(`${this.baseUrl}/product/search`, {
+    const response = await fetchWithTimeout(`${this.baseUrl}/product/search`, {
       method: "POST",
       headers: this.#getHeaders(),
       body: JSON.stringify({
@@ -35,6 +49,7 @@ export class MemosApi {
         include_preference: true,
         search_tool_memory: true,
       }),
+      timeout: 10000 // Fast timeout for search
     });
 
     if (!response.ok) {
@@ -47,7 +62,7 @@ export class MemosApi {
   async add(content, options = {}) {
     const { userId = this.defaultUserId, sessionId = "default_session" } = options;
 
-    const response = await fetch(`${this.baseUrl}/product/add`, {
+    const response = await fetchWithTimeout(`${this.baseUrl}/product/add`, {
       method: "POST",
       headers: this.#getHeaders(),
       body: JSON.stringify({
@@ -56,6 +71,7 @@ export class MemosApi {
         async_mode: "async",  // Use async mode to compute embeddings in background
         messages: content,
       }),
+      timeout: 30000 // Longer timeout for save
     });
 
     if (!response.ok) {
@@ -68,13 +84,14 @@ export class MemosApi {
   async getAll(options = {}) {
     const { userId = this.defaultUserId, memoryType = "text_mem" } = options;
 
-    const response = await fetch(`${this.baseUrl}/product/get_all`, {
+    const response = await fetchWithTimeout(`${this.baseUrl}/product/get_all`, {
       method: "POST",
       headers: this.#getHeaders(),
       body: JSON.stringify({
         user_id: userId,
         memory_type: memoryType,
       }),
+      timeout: 20000
     });
 
     if (!response.ok) {
@@ -87,13 +104,14 @@ export class MemosApi {
   async delete(memoryIds, options = {}) {
     const { userId = this.defaultUserId } = options;
 
-    const response = await fetch(`${this.baseUrl}/product/delete_memory`, {
+    const response = await fetchWithTimeout(`${this.baseUrl}/product/delete_memory`, {
       method: "POST",
       headers: this.#getHeaders(),
       body: JSON.stringify({
         writable_cube_ids: ["default"],
         memory_ids: memoryIds,
       }),
+      timeout: 15000
     });
 
     if (!response.ok) {
