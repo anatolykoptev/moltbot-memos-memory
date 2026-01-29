@@ -275,33 +275,13 @@ function createMemorySaveTool(api, config, logger) {
 
 /**
  * Plugin definition
+ * Note: configSchema is defined in moltbot.plugin.json (single source of truth)
  */
 const memosMemoryPlugin = {
   id: "memos-memory",
   name: "Memory (MemOS)",
   description: "MemOS-backed semantic memory with persistent storage and vector search",
   kind: "memory",
-  configSchema: {
-    type: "object",
-    additionalProperties: false,
-    properties: {
-      apiUrl: {
-        type: "string",
-        description: "MemOS API URL",
-        default: "http://memos-api:8000",
-      },
-      userId: {
-        type: "string",
-        description: "Default user ID for memory operations",
-        default: "default",
-      },
-      topK: {
-        type: "number",
-        description: "Number of results to return from search",
-        default: 10,
-      },
-    },
-  },
 
   register(api) {
     const pluginConfig = api.pluginConfig || {};
