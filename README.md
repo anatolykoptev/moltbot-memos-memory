@@ -1,6 +1,6 @@
 # moltbot-memos-memory
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js->=18-green.svg)](https://nodejs.org/)
 
 A [Moltbot](https://github.com/moltbot/moltbot) plugin that provides semantic memory powered by [MemOS](https://github.com/MemTensor/MemOS) — persistent storage with vector search capabilities.
@@ -131,4 +131,4 @@ The plugin communicates with MemOS API:
 
 ## License
 
-MIT
+Apache-2.0

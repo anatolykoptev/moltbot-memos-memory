@@ -13,7 +13,7 @@
     "vector-database"
   ],
   "author": "Anatoly Koptev",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/anatolykoptev/moltbot-memos-memory.git"
