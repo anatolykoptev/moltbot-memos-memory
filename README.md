@@ -1,6 +1,6 @@
 # moltbot-memos-memory
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js->=18-green.svg)](https://nodejs.org/)
 
 A [Moltbot](https://github.com/moltbot/moltbot) memory plugin backed by [MemOS](https://github.com/MemTensor/MemOS):
@@ -71,4 +71,4 @@ and issues are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Licence
 
-MIT; see [LICENSE](LICENSE). Agent notes: [CLAUDE.md](CLAUDE.md); all documents: [docs/INDEX.md](docs/INDEX.md).
+Apache-2.0; see [LICENSE](LICENSE). Agent notes: [CLAUDE.md](CLAUDE.md); all documents: [docs/INDEX.md](docs/INDEX.md).

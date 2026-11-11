@@ -8,4 +8,4 @@
 | [CHANGELOG](../CHANGELOG.md) | Notable changes since the first commit. |
 | [SECURITY](../SECURITY.md) | How to report a vulnerability privately. |
 | [CODE_OF_CONDUCT](../CODE_OF_CONDUCT.md) | Contributor Covenant 3.0 code of conduct. |
-| [LICENSE](../LICENSE) | MIT licence text. |
+| [LICENSE](../LICENSE) | Apache-2.0 licence text. |
