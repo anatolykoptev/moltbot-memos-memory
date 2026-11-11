@@ -3,132 +3,72 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js->=18-green.svg)](https://nodejs.org/)
 
-A [Moltbot](https://github.com/moltbot/moltbot) plugin that provides semantic memory powered by [MemOS](https://github.com/MemTensor/MemOS) — persistent storage with vector search capabilities.
+A [Moltbot](https://github.com/moltbot/moltbot) memory plugin backed by [MemOS](https://github.com/MemTensor/MemOS):
+three agent tools that search, list and save memories through a MemOS HTTP API. The MemOS server does
+the embedding, vector storage and search; this plugin is the client. It is for people running Moltbot
+with a MemOS backend. (The sibling plugin for Clawdbot is
+[clawdbot-memos-memory](https://github.com/anatolykoptev/clawdbot-memos-memory).)
 
-## Features
+## Tools
 
-- **Semantic Search** — Find memories by meaning, not just keywords
-- **Persistent Storage** — PostgreSQL + pgvector backend
-- **Auto-indexing** — Memories are automatically embedded and indexed
-- **Preference Tracking** — Remembers user preferences and context
+| Tool | What it does |
+|---|---|
+| `memory_search` | Semantic search (`query`, optional `maxResults` default 10, `minScore` default 0). Calls MemOS in `fast` mode and includes preference memories. |
+| `memory_get` | Lists the user's stored text memories, with an optional `filter` string. |
+| `memory_save` | Stores `content`. The call returns at once and the save finishes in the background; a failure is only logged. |
 
-## Installation
+## Install
 
-### As Moltbot Extension
+Requires Node.js 18 or newer. Clone into the Moltbot extensions directory:
 
-Clone into your Moltbot extensions directory:
-
-```bash
+```sh
 cd ~/.moltbot/extensions
 git clone https://github.com/anatolykoptev/moltbot-memos-memory.git memos-memory
 ```
 
-### Docker (recommended)
-
-The plugin is designed to work with a MemOS backend. See the Docker setup below.
+There is no build step and no npm dependency.
 
 ## Configuration
 
-Add to your `moltbot.json`:
+Select the plugin for the memory slot in `moltbot.json`:
 
 ```json
 {
   "plugins": {
-    "slots": {
-      "memory": "memos-memory"
-    },
+    "slots": { "memory": "memos-memory" },
     "entries": {
       "memos-memory": {
         "enabled": true,
-        "config": {
-          "apiUrl": "http://memos-api:8000",
-          "userId": "default",
-          "topK": 10
-        }
+        "config": { "apiUrl": "http://memos-api:8000", "userId": "default", "topK": 10 }
       }
     }
   }
 }
 ```
 
-## Environment Variables
+| Plugin option | Environment fallback | Default |
+|---|---|---|
+| `apiUrl` | `MEMOS_API_URL` | `http://memos-api:8000` |
+| `userId` | `MEMOS_USER_ID` | `default` |
+| `topK` | none | `10` |
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `MEMOS_API_URL` | MemOS API endpoint | `http://memos-api:8000` |
-| `MEMOS_USER_ID` | Default user ID | `default` |
-| `INTERNAL_SERVICE_SECRET` | API key for MemOS authentication | — |
+`INTERNAL_SERVICE_SECRET` is read from the environment, never from the plugin config. When set, it is
+sent as the `X-Internal-Service` header (a leading `krlk_` prefix is removed first). Without it
+the plugin still starts and logs a warning, and requests fail if the server requires authentication.
+Pass the variable to the Moltbot process or container. Note that `topK` is declared in the config but
+the search tool uses its own `maxResults` argument (default 10).
 
-### Authentication
+## MemOS endpoints used
 
-If your MemOS API has `AUTH_ENABLED=true`, the plugin will automatically use `INTERNAL_SERVICE_SECRET` from environment for Bearer token authentication. Make sure to pass this variable to your Moltbot container.
+All are `POST` under the `apiUrl`: `/product/search`, `/product/add` (asynchronous embedding),
+`/product/get_all` and `/product/delete_memory`. The server must provide these routes.
 
-## Provided Tools
+## Status
 
-### `memory_search`
+Version 1.0.1, small and stable: the code is `index.js` (tools and plugin registration) and `api.js`
+(HTTP client with per-call timeouts: 10 s search, 30 s save, 20 s list, 15 s delete). Contributions
+and issues are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Semantic search across all stored memories.
+## Licence
 
-```
-Query: "What did we discuss about the project deadline?"
-```
-
-### `memory_save`
-
-Save important information to persistent memory.
-
-```
-Content: "User prefers TypeScript over JavaScript for new projects"
-```
-
-### `memory_get`
-
-Retrieve all memories with optional filtering.
-
-## Requirements
-
-- **MemOS API** — Running and accessible
-- **PostgreSQL** — With pgvector extension
-- **Embedding Service** — For vector generation
-
-## Docker Compose Example
-
-```yaml
-services:
-  moltbot:
-    image: your-moltbot-image
-    volumes:
-      - ./extensions/memos-memory:/home/node/.moltbot/extensions/memos-memory
-    depends_on:
-      - memos-api
-
-  memos-api:
-    image: your-memos-api-image
-    environment:
-      - DATABASE_URL=postgresql://user:pass@postgres:5432/memos
-    depends_on:
-      - postgres
-      - embedding-service
-
-  postgres:
-    image: pgvector/pgvector:pg16
-    environment:
-      - POSTGRES_DB=memos
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
-
-  embedding-service:
-    image: your-embedding-service
-```
-
-## API Reference
-
-The plugin communicates with MemOS API:
-
-- `POST /api/v1/memory/search` — Semantic search
-- `POST /api/v1/memory/add` — Add new memory
-- `GET /api/v1/memory/list` — List all memories
-
-## License
-
-Apache-2.0
+Apache-2.0; see [LICENSE](LICENSE). Agent notes: [CLAUDE.md](CLAUDE.md); all documents: [docs/INDEX.md](docs/INDEX.md).
